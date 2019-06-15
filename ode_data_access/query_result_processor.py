@@ -10,7 +10,6 @@ class QueryResultProcessor:
         self.lblReader = LBLReader()
         self.product_image_urls = []
 
-    @staticmethod
     def get_bin_type(self, binning):
         if binning.startswith('(-9998'):
             return 1
@@ -20,7 +19,6 @@ class QueryResultProcessor:
             return 4
         return None
 
-    @staticmethod
     def download_product_images(self, product_image_urls):
         for product_image_url, product_name in product_image_urls:
             print("Downloading", product_image_url)
