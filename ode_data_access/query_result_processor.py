@@ -22,7 +22,8 @@ class QueryResultProcessor:
     def download_product_images(self, product_image_urls):
         for product_image_url, product_name in product_image_urls:
             print("Downloading", product_image_url)
-            urllib.request.urlretrieve(product_image_url)
+            filename = product_image_url.split('/')[-1]
+            urllib.request.urlretrieve(product_image_url, filename)
 
     def download(self, query_results, bin_type):
         self.find_required_products(query_results, bin_type)
