@@ -1,7 +1,7 @@
 import matplotlib.image as mpimg
 import cv2
 import rasterio
-from ode_data_access.image_utils import view_as_blocks
+from ode_data_access.image_utils import view_as_blocks, is_black, align_and_crop
 import os
 import numpy as np
 from tqdm import tqdm
@@ -14,14 +14,14 @@ class ChunkProcessor:
         for i in range(result_blocks.shape[0]):
             for j in range(result_blocks.shape[1]):
                 img = result_blocks[i][j]
-                if not skip_black_images or not self.is_black(img):
+                if not skip_black_images or not is_black(img):
                     filename = f'{product_name}_img_row_{window.row_off}_col_{window.col_off}_w_{window.width}_h_{window.height}_x_{i}_y_{j}.jpg'
                     filepath = './' + save_dir + '/' + filename
                     mpimg.imsave(filepath, img, cmap="gray")
                     img = mpimg.imread(filepath)
 
                     if align_images:
-                        img = self.align_and_crop(img)
+                        img = align_and_crop(img)
                         img = cv2.resize(img, (chunk_size, chunk_size), cv2.INTER_AREA)
                         mpimg.imsave(filepath, img, cmap='gray')
                         new_filename = f'{product_name}_img_row_{window.row_off}_col_{window.col_off}_w_{img.shape[1]}_h_{img.shape[0]}_x_{i}_y_{j}.jpg'
