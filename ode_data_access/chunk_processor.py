@@ -70,6 +70,7 @@ class ChunkProcessor:
         for product_image_url, product_name in product_image_urls:
             filename = product_image_url.split('/')[-1]
             if filename.endswith('JP2'):
+                print('Chunkifying', product_name)
                 jp2_filename = filename
                 chunk_dir = save_dir_prefix + '_' + product_name
 
@@ -79,8 +80,9 @@ class ChunkProcessor:
                 self.chunkify(jp2_filename, product_name, chunk_size, chunk_dir, skip_black_images, align_images,
                          vectorized_chunks)
 
-                print("Number of chunks:",
+                print("Number of chunks found:",
                       len([name for name in os.listdir(chunk_dir) if os.path.isfile(chunk_dir + '/' + name)]))
+                print('-----')
 
         if save_npz:
             np.savez_compressed('all_chunks.npz', np.array(vectorized_chunks))

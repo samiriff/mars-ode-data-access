@@ -28,7 +28,10 @@ class QueryResultProcessor:
     def download(self, query_results, bin_type):
         self.find_required_products(query_results, bin_type)
         self.find_required_product_image_urls(query_results)
+        print('Required Product Names matching the given bin type =', self.required_products)
+        print('Total number of images to be downloaded =', len(self.product_image_urls))
         self.download_product_images(self.product_image_urls)
+        print('----')
 
     def find_required_products(self, query_results, bin_type):
         for query_result in query_results.keys():
@@ -48,6 +51,7 @@ class QueryResultProcessor:
                 self.product_image_urls.append((query_result, product_name))
 
     def process(self, save_dir_prefix, chunk_size, skip_black_images, align_images, save_npz):
+        print('Beginning Chunking Process')
         chunk_processor = ChunkProcessor()
         chunk_processor.chunkify_all(save_dir_prefix, chunk_size,
                                      self.product_image_urls, skip_black_images, align_images, save_npz)

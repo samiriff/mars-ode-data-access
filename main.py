@@ -25,7 +25,7 @@ if __name__ == '__main__':
                                                      western_lon, eastern_lon, min_lat, max_lat,
                                                      min_ob_time, max_ob_time, product_id, file_name,
                                                      number_product_limit, result_offset_number)
-    print("Number of Files found =", len(query_results.keys()))
+    print("Total Number of Files of all bin types =", len(query_results.keys()))
 
     SAVE_DIR_PREFIX = 'chunks'
     CHUNK_SIZE = 1024

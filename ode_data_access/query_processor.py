@@ -22,6 +22,5 @@ class QueryProcessor:
                                   number_product_limit, result_offset_number)
 
         print('Query URL:', query_url)
-        print('\nFiles that will be downloaded (if not previously downloaded):')
         file_urls = get_files_urls(query_url, file_name, print_info=False)
         return file_urls
