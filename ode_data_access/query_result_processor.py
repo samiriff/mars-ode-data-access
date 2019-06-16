@@ -1,5 +1,6 @@
 from ode_data_access.lblreader import  LBLReader
 from ode_data_access.chunk_processor import ChunkProcessor
+from ode_data_access.image_utils import query_yes_no
 import urllib
 import time
 import sys
@@ -45,8 +46,13 @@ class QueryResultProcessor:
         self.find_required_product_image_urls(query_results)
         print('Required Product Names matching the given bin type =', self.required_products)
         print('Total number of images to be downloaded =', len(self.product_image_urls))
+        should_continue = query_yes_no('\nDo you wish to proceed?')
+        if should_continue == "no":
+            print('Terminating Process...')
+            return False
         self.download_product_images(self.product_image_urls)
         print('----')
+        return True
 
     def find_required_products(self, query_results, bin_type):
         for query_result in query_results.keys():

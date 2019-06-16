@@ -2,6 +2,7 @@ import numpy as np
 from numpy.lib.stride_tricks import as_strided
 from warnings import warn
 from ode_data_access.autocropper import AutoCropper
+import sys
 
 
 def view_as_blocks(arr_in, block_shape):
@@ -122,3 +123,38 @@ def align_and_crop(img):
     ac.tolerance = 10 			# defaults to 4, a gray value is more likely to be considered black when you increase the tolerance
     result = ac.autocrop()
     return result
+
+
+def query_yes_no(question, default="yes"):
+    """
+    Ask a yes/no question via raw_input() and return the answer
+    Written by Trent Mick under the MIT license, see:
+    https://code.activestate.com/recipes/577058-query-yesno/
+
+    @param question: A string that is presented to the user
+    @param default: The presumed answer if the user just hits <Enter>.
+                    It must be "yes" (the default), "no" or None (meaning
+                    an answer is required of the user)
+    @return The "answer", i.e., either "yes" or "no"
+    """
+
+    valid = {"yes": "yes", "y": "yes", "ye": "yes",
+             "no": "no", "n": "no"}
+    if default is None:
+        prompt = " [y/n] "
+    elif default == "yes":
+        prompt = " [Y/n] "
+    elif default == "no":
+        prompt = " [y/N] "
+    else:
+        raise ValueError("invalid default answer: '%s'" % default)
+
+    while 1:
+        sys.stdout.write(question + prompt)
+        choice = input().lower()
+        if default is not None and choice == '':
+            return default
+        elif choice in valid.keys():
+            return valid[choice]
+        else:
+            sys.stdout.write("Please respond with 'yes' or 'no' (or 'y' or 'n').\n")
