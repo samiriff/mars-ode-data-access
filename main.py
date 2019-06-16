@@ -44,6 +44,6 @@ if __name__ == '__main__':
 
     query_result_processor = QueryResultProcessor()
     query_result_processor.download(query_results, bin_type)
-    query_result_processor.process(SAVE_DIR_PREFIX, CHUNK_SIZE, SKIP_BLACK_IMAGES, ALIGN_IMAGES, SAVE_NPZ, vectorized_chunks)
+    query_result_processor.process(SAVE_DIR_PREFIX, CHUNK_SIZE, SKIP_BLACK_IMAGES, ALIGN_IMAGES, vectorized_chunks)
 
     np.savez_compressed('all_chunks.npz', np.array(vectorized_chunks))

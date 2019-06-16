@@ -36,7 +36,6 @@ class QueryResultProcessor:
     def download_product_images(self, product_image_urls):
         for product_image_url, product_name in product_image_urls:
             print("Downloading", product_image_url)
-            sys.stdout.write('\rFetching ' + 'test' + '...\n')
             filename = product_image_url.split('/')[-1]
             urllib.request.urlretrieve(product_image_url, filename, reporthook=self.download_progress_callback)
             print()
