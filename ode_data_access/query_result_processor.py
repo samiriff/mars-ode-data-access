@@ -1,7 +1,8 @@
 from ode_data_access.lblreader import  LBLReader
 from ode_data_access.chunk_processor import ChunkProcessor
 import urllib
-
+import time
+import sys
 
 class QueryResultProcessor:
 
@@ -19,11 +20,26 @@ class QueryResultProcessor:
             return 4
         return None
 
+    def download_progress_callback(self, count, block_size, total_size):
+        global start_time
+        if count == 0:
+            start_time = time.time()
+            return
+        duration = time.time() - start_time
+        progress_size = int(count * block_size)
+        speed = int(progress_size / (1024 * duration))
+        percent = min(int(count * block_size * 100 / total_size), 100)
+        sys.stdout.write("\r...%d%%, %d MB, %d KB/s, %d seconds passed" %
+                         (percent, progress_size / (1024 * 1024), speed, duration))
+        sys.stdout.flush()
+
     def download_product_images(self, product_image_urls):
         for product_image_url, product_name in product_image_urls:
             print("Downloading", product_image_url)
+            sys.stdout.write('\rFetching ' + 'test' + '...\n')
             filename = product_image_url.split('/')[-1]
-            urllib.request.urlretrieve(product_image_url, filename)
+            urllib.request.urlretrieve(product_image_url, filename, reporthook=self.download_progress_callback)
+            print()
 
     def download(self, query_results, bin_type):
         self.find_required_products(query_results, bin_type)
@@ -50,8 +66,9 @@ class QueryResultProcessor:
             if product_type == 'PRODUCT DATA FILE' and product_name in self.required_products:
                 self.product_image_urls.append((query_result, product_name))
 
-    def process(self, save_dir_prefix, chunk_size, skip_black_images, align_images, save_npz):
+    def process(self, save_dir_prefix, chunk_size, skip_black_images, align_images, vectorized_chunks=None):
         print('Beginning Chunking Process')
         chunk_processor = ChunkProcessor()
         chunk_processor.chunkify_all(save_dir_prefix, chunk_size,
-                                     self.product_image_urls, skip_black_images, align_images, save_npz)
+                                     self.product_image_urls, skip_black_images, align_images, vectorized_chunks)
+        print('Completed Chunking Process')

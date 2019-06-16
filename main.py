@@ -1,8 +1,11 @@
 from ode_data_access.query_processor import QueryProcessor
 from ode_data_access.query_result_processor import QueryResultProcessor
+import numpy as np
 
 
 if __name__ == '__main__':
+    vectorized_chunks = []
+
     target = 'mars'  # Aimed planetary body, i.e., Mars, Mercury, Moon, Phobos, or Venus
     mission = 'MRO'  # Aimed mission, e.g., MGS or MRO
     instrument = 'HIRISE'  # Aimed instrument from the mission, e.g., HIRISE or CRISM
@@ -41,4 +44,6 @@ if __name__ == '__main__':
 
     query_result_processor = QueryResultProcessor()
     query_result_processor.download(query_results, bin_type)
-    query_result_processor.process(SAVE_DIR_PREFIX, CHUNK_SIZE, SKIP_BLACK_IMAGES, ALIGN_IMAGES, SAVE_NPZ)
+    query_result_processor.process(SAVE_DIR_PREFIX, CHUNK_SIZE, SKIP_BLACK_IMAGES, ALIGN_IMAGES, SAVE_NPZ, vectorized_chunks)
+
+    np.savez_compressed('all_chunks.npz', np.array(vectorized_chunks))

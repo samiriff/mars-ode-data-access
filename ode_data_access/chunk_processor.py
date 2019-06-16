@@ -62,10 +62,7 @@ class ChunkProcessor:
 
 
     def chunkify_all(self, save_dir_prefix, chunk_size, product_image_urls, skip_black_images=True, align_images=False,
-                     save_npz=False):
-        vectorized_chunks = None
-        if save_npz:
-            vectorized_chunks = []
+                     vectorized_chunks=None):
 
         for product_image_url, product_name in product_image_urls:
             filename = product_image_url.split('/')[-1]
@@ -83,6 +80,3 @@ class ChunkProcessor:
                 print("Number of chunks found:",
                       len([name for name in os.listdir(chunk_dir) if os.path.isfile(chunk_dir + '/' + name)]))
                 print('-----')
-
-        if save_npz:
-            np.savez_compressed('all_chunks.npz', np.array(vectorized_chunks))
