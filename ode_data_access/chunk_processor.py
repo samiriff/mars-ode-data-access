@@ -29,6 +29,7 @@ class ChunkProcessor:
                         os.rename(filepath, new_filepath)
 
                     if vectorized_chunks is not None:
+                        img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
                         vectorized_chunks.append(img.astype(np.uint8))
 
 
