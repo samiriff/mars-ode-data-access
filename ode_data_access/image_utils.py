@@ -116,11 +116,11 @@ def is_black(img, threshold=20):
     return False
 
 
-def align_and_crop(img):
+def align_and_crop(img, max_border_size=200, safety_margin=0, tolerance=10):
     ac = AutoCropper(img)
-    ac.max_border_size = 200 	# defaults to 300
-    ac.safety_margin = 0 		# defaults to 4, removes extra pixels from the sides to make sure no black remains
-    ac.tolerance = 10 			# defaults to 4, a gray value is more likely to be considered black when you increase the tolerance
+    ac.max_border_size = max_border_size 	# defaults to 300
+    ac.safety_margin = safety_margin 		# defaults to 4, removes extra pixels from the sides to make sure no black remains
+    ac.tolerance = tolerance     			# defaults to 4, a gray value is more likely to be considered black when you increase the tolerance
     result = ac.autocrop()
     return result
 

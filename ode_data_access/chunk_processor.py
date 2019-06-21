@@ -10,7 +10,7 @@ from tqdm import tqdm
 class ChunkProcessor:
 
     def write_result_blocks(self, result_blocks, window, product_name, chunk_size, save_dir='test', skip_black_images=False,
-                            align_images=False, vectorized_chunks=None):
+                            align_and_crop_thresholds=None, vectorized_chunks=None):
         for i in range(result_blocks.shape[0]):
             for j in range(result_blocks.shape[1]):
                 img = result_blocks[i][j]
@@ -20,8 +20,8 @@ class ChunkProcessor:
                     mpimg.imsave(filepath, img, cmap="gray")
                     img = mpimg.imread(filepath)
 
-                    if align_images:
-                        img = align_and_crop(img)
+                    if align_and_crop_thresholds is not None:
+                        img = align_and_crop(img, *align_and_crop_thresholds)
                         img = cv2.resize(img, (chunk_size, chunk_size), cv2.INTER_AREA)
                         mpimg.imsave(filepath, img, cmap='gray')
                         new_filename = f'{product_name}_img_row_{window.row_off}_col_{window.col_off}_w_{img.shape[1]}_h_{img.shape[0]}_x_{i}_y_{j}.jpg'
@@ -34,7 +34,7 @@ class ChunkProcessor:
 
 
     # Based on the idea provided here - https://gis.stackexchange.com/questions/158527/reading-raster-files-by-block-with-rasterio
-    def chunkify(self, img_file, product_name, chunk_size=256, save_dir='test', skip_black_images=True, align_images=False,
+    def chunkify(self, img_file, product_name, chunk_size=256, save_dir='test', skip_black_images=True, align_and_crop_thresholds=None,
                  vectorized_chunks=None):
         with rasterio.open(img_file) as src:
             print('Resolution =', src.width, 'x', src.height)
@@ -59,10 +59,10 @@ class ChunkProcessor:
                 if block_array_shape[0] % chunk_size == 0 and block_array_shape[1] % chunk_size == 0:
                     result_blocks = view_as_blocks(block_array, block_shape=(chunk_size, chunk_size))
                     self.write_result_blocks(result_blocks, window, product_name, chunk_size, save_dir, skip_black_images,
-                                        align_images, vectorized_chunks)
+                                        align_and_crop_thresholds, vectorized_chunks)
 
 
-    def chunkify_all(self, save_dir_prefix, chunk_size, product_image_urls, skip_black_images=True, align_images=False,
+    def chunkify_all(self, save_dir_prefix, chunk_size, product_image_urls, skip_black_images=True, align_and_crop_thresholds=None,
                      vectorized_chunks=None):
 
         for product_image_url, product_name in product_image_urls:
@@ -75,7 +75,7 @@ class ChunkProcessor:
                 if not os.path.exists(chunk_dir):
                     os.makedirs(chunk_dir)
 
-                self.chunkify(jp2_filename, product_name, chunk_size, chunk_dir, skip_black_images, align_images,
+                self.chunkify(jp2_filename, product_name, chunk_size, chunk_dir, skip_black_images, align_and_crop_thresholds,
                          vectorized_chunks)
 
                 print("Number of chunks found:",

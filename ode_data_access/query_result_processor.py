@@ -71,9 +71,9 @@ class QueryResultProcessor:
             if product_type == 'PRODUCT DATA FILE' and product_name in self.required_products:
                 self.product_image_urls.append((query_result, product_name))
 
-    def process(self, save_dir_prefix, chunk_size, skip_black_images, align_images, vectorized_chunks=None):
+    def process(self, save_dir_prefix, chunk_size, skip_black_images, align_and_crop_thresholds, vectorized_chunks=None):
         print('Beginning Chunking Process')
         chunk_processor = ChunkProcessor()
         chunk_processor.chunkify_all(save_dir_prefix, chunk_size,
-                                     self.product_image_urls, skip_black_images, align_images, vectorized_chunks)
+                                     self.product_image_urls, skip_black_images, align_and_crop_thresholds, vectorized_chunks)
         print('Completed Chunking Process')

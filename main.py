@@ -36,7 +36,12 @@ if __name__ == '__main__':
 
     # Default Settings to Skip all black images
     SKIP_BLACK_IMAGES = True  # Set to False to retain all images that contain black pixels
-    ALIGN_IMAGES = True  # Set to True to test Sebastien's rotation of images with black margin
+
+    # Default Settings to Align and Crop images with black margins
+    MAX_BORDER_SIZE = 200   # Border to be checked around the image
+    SAFETY_MARGIN = 0       # Removes extra pixels from the sides to make sure no black remains
+    TOLERANCE = 10          # A gray value is more likely to be considered black when you increase the tolerance
+    ALIGN_AND_CROP_THRESHOLDS = (MAX_BORDER_SIZE, SAFETY_MARGIN, TOLERANCE) # Set to None to prevent alignment and cropping
 
     # Uncomment the following lines to Keep black images and use Sebastien's rotation logic to align images
     # SKIP_BLACK_IMAGES = False
@@ -45,6 +50,6 @@ if __name__ == '__main__':
     query_result_processor = QueryResultProcessor()
     should_continue = query_result_processor.download(query_results, bin_type)
     if should_continue:
-        query_result_processor.process(SAVE_DIR_PREFIX, CHUNK_SIZE, SKIP_BLACK_IMAGES, ALIGN_IMAGES, vectorized_chunks)
+        query_result_processor.process(SAVE_DIR_PREFIX, CHUNK_SIZE, SKIP_BLACK_IMAGES, ALIGN_AND_CROP_THRESHOLDS, vectorized_chunks)
 
     np.savez_compressed('all_chunks.npz', np.array(vectorized_chunks))
