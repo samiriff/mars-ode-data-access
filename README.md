@@ -47,6 +47,7 @@ query_results = query_processor.query_files_urls(target, mission, instrument, pr
 
 #### Supported Query Parameters
 The list of supported query parameters is as shown below:
+
 | Parameter | Description |
 |--|--|
 | target | Aimed planetary body, i.e., Mars, Mercury, Moon, Phobos, or Venus |
@@ -76,11 +77,13 @@ if should_continue:
 
 #### Supported Query Result Parameters
 The list of supported query result parameters is as shown below:
+
 | Parameter | Description |
 |--|--|
 | bin_type | Type of binning used in image - Bin1 = 0.35 cm/pixel, Bin2 = 2xBin1, Bin4 = 2xBin2 |
 
 #### Chunk Parameters
+
 | Parameter | Description |
 |--|--|
 | save_dir_prefix | Prefix to be used in the name of the directory where the chunks of an image will be saved. For eg., chunks of an image "ESP_123_456.JP2" will be saved in a directory named "save_dir_prefix_ESP_123_456" | 
@@ -89,6 +92,7 @@ The list of supported query result parameters is as shown below:
 | skip_black_images | Flag to indicate that all images containing black pixels near the center should be skipped |
 
 #### Chunk Alignment and Cropping Thresholds
+
 | Parameter | Description |
 |--|--|
 | max_border_size | Border to be checked around the image while aligning and cropping black margins |
