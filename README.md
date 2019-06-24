@@ -16,12 +16,12 @@ Since the data return by the ODE usually consists of high-resolution map-project
 ```
 root/
 ├── ode_data_access/                
-│   ├── autocropper.py/                    Aligns, rotates and crops images to remove black margins
-│   ├── chunk_processor.py/                Slices a high-resolution (m x n) image into (m / p x n / p) chunks, where each chunk is of size (p x p)
-│   ├── image_utils.py/                    Utility methods to process images
-│   ├── lblreader.py/                      Reads an LBL file and converts it into a map of key-value pairs
-│   ├── query_processor.py/                Constructs a HTTP Request to be sent to the Orbital Data Explorer, using user-defined query parameters 
-│   ├── query_result_processor.py/         Processes the results sent by the Orbital Data Explorer in response to a user-defined query
+│   ├── autocropper.py                    Aligns, rotates and crops images to remove black margins
+│   ├── chunk_processor.py                Slices a high-resolution (m x n) image into (m / p x n / p) chunks, where each chunk is of size (p x p)
+│   ├── image_utils.py                    Utility methods to process images
+│   ├── lblreader.py                      Reads an LBL file and converts it into a map of key-value pairs
+│   ├── query_processor.py                Constructs a HTTP Request to be sent to the Orbital Data Explorer, using user-defined query parameters 
+│   ├── query_result_processor.py         Processes the results sent by the Orbital Data Explorer in response to a user-defined query
 ├── LICENSE
 ├── main.py                                Provides Sample Usage of package
 ├── README.md
@@ -32,9 +32,12 @@ root/
 
 ## Basic Usage
 
+Run `main.py` to generate a sample query and fetch sample results:
+`python main.py`
+
 The entire process consists of 3 steps:
 
-### 1. Query Processor
+### 1. Initialize Query Processor
 Initialize an instance of the QueryProcessor class to process user-defined query parameters, details of which are given in the upcoming sections:
 
 ```
@@ -66,7 +69,7 @@ The list of supported query parameters is as shown below:
 | result_offset_number | Offset the return products, to go beyond the limit of 100 returned products |
 | remove_ndv | Replace the no-data value as mentionned in the label by np.nan |
 
-### 2. Query Result Processor
+### 2. Initialize Query Result Processor
 Initialize an instance of the QueryResultProcessor class to process the results returned by your QueryProcessor instance. In this step, you will have to specify user-defined parameters for the chunks and bin type (if applicable):
 ```
 query_result_processor = QueryResultProcessor()
@@ -83,6 +86,7 @@ The list of supported query result parameters is as shown below:
 | bin_type | Type of binning used in image - Bin1 = 0.35 cm/pixel, Bin2 = 2xBin1, Bin4 = 2xBin2 |
 
 #### Chunk Parameters
+The following parameters can be used to control how chunks are processed:
 
 | Parameter | Description |
 |--|--|
@@ -92,6 +96,7 @@ The list of supported query result parameters is as shown below:
 | skip_black_images | Flag to indicate that all images containing black pixels near the center should be skipped |
 
 #### Chunk Alignment and Cropping Thresholds
+The following parameters can be used to control how a chunk containing black margins, is aligned, cropped and/or rotated:
 
 | Parameter | Description |
 |--|--|
