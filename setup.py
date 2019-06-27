@@ -57,7 +57,7 @@ setup(
     install_requires=[
         "__future__",
         "cv2",
-        "matplotlib"
+        "matplotlib",
         "numpy",
         "rasterio",
         "scikit-dataaccess",
