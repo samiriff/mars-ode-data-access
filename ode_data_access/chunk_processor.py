@@ -67,7 +67,7 @@ class ChunkProcessor:
 
         for product_image_url, product_name in product_image_urls:
             filename = product_image_url.split('/')[-1]
-            if filename.endswith('JP2'):
+            if filename.endswith('JP2') or filename.lower().endswith('jpg'):
                 print('Chunkifying', product_name)
                 jp2_filename = filename
                 chunk_dir = save_dir_prefix + '_' + product_name

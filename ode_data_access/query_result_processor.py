@@ -4,6 +4,8 @@ from ode_data_access.image_utils import query_yes_no
 import urllib
 import time
 import sys
+import os
+
 
 class QueryResultProcessor:
 
@@ -38,12 +40,15 @@ class QueryResultProcessor:
         for product_image_url, product_name in product_image_urls:
             print("Downloading", product_image_url)
             filename = product_image_url.split('/')[-1]
-            urllib.request.urlretrieve(product_image_url, filename, reporthook=self.download_progress_callback)
+            if os.path.exists(filename):
+                print(f'{filename} has already been downloaded')
+            else:
+                urllib.request.urlretrieve(product_image_url, filename, reporthook=self.download_progress_callback)
             print()
 
-    def download(self, query_results, bin_type):
+    def download(self, query_results, bin_type, product_types=None):
         self.find_required_products(query_results, bin_type)
-        self.find_required_product_image_urls(query_results)
+        self.find_required_product_image_urls(query_results, product_types)
         print('Required Product Names matching the given bin type =', self.required_products)
         print('Total number of images to be downloaded =', len(self.product_image_urls))
         should_continue = query_yes_no('\nDo you wish to proceed?')
@@ -65,10 +70,12 @@ class QueryResultProcessor:
                 if self.get_bin_type(binning) == bin_type:
                     self.required_products.add(product_name)
 
-    def find_required_product_image_urls(self, query_results):
+    def find_required_product_image_urls(self, query_results, product_types):
+        if product_types is None:
+            product_types = set(['PRODUCT DATA FILE'])
         for query_result in query_results.keys():
             product_name, product_type = query_results[query_result]
-            if product_type == 'PRODUCT DATA FILE' and product_name in self.required_products:
+            if (product_type in product_types) and product_name in self.required_products:
                 self.product_image_urls.append((query_result, product_name))
 
     def process(self, save_dir_prefix, chunk_size, skip_black_images, align_and_crop_thresholds, vectorized_chunks=None):
