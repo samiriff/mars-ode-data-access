@@ -46,8 +46,8 @@ class QueryResultProcessor:
                 urllib.request.urlretrieve(product_image_url, filename, reporthook=self.download_progress_callback)
             print()
 
-    def download(self, query_results, bin_type, product_types=None):
-        self.find_required_products(query_results, bin_type)
+    def download(self, query_results, bin_types=None, product_types=None):
+        self.find_required_products(query_results, bin_types)
         self.find_required_product_image_urls(query_results, product_types)
         print('Required Product Names matching the given bin type =', self.required_products)
         print('Total number of images to be downloaded =', len(self.product_image_urls))
@@ -59,15 +59,18 @@ class QueryResultProcessor:
         print('----')
         return True
 
-    def find_required_products(self, query_results, bin_type):
+    def find_required_products(self, query_results, bin_types=None):
         for query_result in query_results.keys():
             product_name, product_type = query_results[query_result]
             if product_type == 'PRODUCT LABEL FILE':
                 filename = query_result.split('/')[-1]
-                urllib.request.urlretrieve(query_result, filename)
+                if os.path.exists(filename):
+                    print(f'{filename} has already been downloaded')
+                else:
+                    urllib.request.urlretrieve(query_result, filename)
                 self.lblReader.read(filename)
                 binning = self.lblReader.get('MRO:BINNING')
-                if self.get_bin_type(binning) == bin_type:
+                if bin_types is None or self.get_bin_type(binning) in bin_types:
                     self.required_products.add(product_name)
 
     def find_required_product_image_urls(self, query_results, product_types):
