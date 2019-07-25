@@ -73,7 +73,9 @@ The list of supported query parameters is as shown below:
 Initialize an instance of the QueryResultProcessor class to process the results returned by your QueryProcessor instance. In this step, you will have to specify user-defined parameters for the chunks and bin type (if applicable):
 ```
 query_result_processor = QueryResultProcessor()
-should_continue = query_result_processor.download(query_results, bin_type)
+should_continue = query_result_processor.download(query_results, bin_type, product_types)
+
+## Add the following lines only if you wish to chunkify all downloaded images
 if should_continue:
   query_result_processor.process(SAVE_DIR_PREFIX, CHUNK_SIZE, SKIP_BLACK_IMAGES, ALIGN_AND_CROP_THRESHOLDS, None)
 ```
@@ -84,6 +86,7 @@ The list of supported query result parameters is as shown below:
 | Parameter | Description |
 |--|--|
 | bin_type | Type of binning used in image - Bin1 = 0.35 cm/pixel, Bin2 = 2xBin1, Bin4 = 2xBin2 |
+| product_types | Set of product types to which any downloaded product should belong. Eg., PRODUCT DATA FILE, BROWSE, GREYSCALE THUMBNAIL |
 
 #### Chunk Parameters
 The following parameters can be used to control how chunks are processed:
